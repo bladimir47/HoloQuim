@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CBCBCB" >
+ 
+    <LinearLayout
+        android:id="@+id/buttonsLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:weightSum="3" >
+ 
+        <Button
+            android:id="@+id/buttonLeft2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="come"
+            android:onClick="onClic"/>
+        
+        <Button
+            android:id="@+id/buttonLeft3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="help"
+            android:onClick="onClic"/>
+ 
+        <Button
+            android:id="@+id/buttonRight2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="utili"
+            android:onClick="onClic"/>
+    </LinearLayout>
+    
+    
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonsLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scrollbarStyle="outsideInset" >
+ 
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="396dp"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+ 
+    
+ 
+</RelativeLayout>
