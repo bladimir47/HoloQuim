@@ -1,8 +1,7 @@
 package com.chocolatescript.holoquim;
 
 
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +9,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,39 +30,78 @@ import android.widget.TextView;
 import android.widget.Toast;
 import estaticas.valoresgenerales;
 import json.objetosReaccionesCort;
+import json.objetosReaccionesLargo;
 import json.parser;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class MainActivity extends Activity {
+public class menugrande extends Activity{
 
+	
 	private ViewGroup Vg; 
 	private List<RelativeLayout> rowItem;
-	public static List<objetosReaccionesCort>reaccionesObj;
+	public static List<objetosReaccionesLargo>reaccionesObj;
 	private ListView listViewdos;
 	private int val = 0;
 	private ProgressDialog progredial;
 	private RelativeLayout relativeLayout;
 	private JSONArray reacciones = null;
-	private static String url = "http://chocolatescript.tk/holoquim/android/reacciones.php";
-	
-	
+	private static String url = "http://chocolatescript.tk/holoquim/android/reaccionejemplo.php?reacc=";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.comgrande_main);
 		Vg = (ViewGroup)findViewById(R.id.content);
+		url = "http://chocolatescript.tk/holoquim/android/reaccionejemplo.php?reacc="+valoresgenerales.valorReaccion;
 		new Carga().execute();
 	}
 	
 	public void onClic(View botton){
-		val++;	
+		//val++;
+		//this.agregarmenu();
 	}
 	
 	
 	
+	public void agregarmenu(){
+		
+		LayoutInflater inflater = LayoutInflater.from(menugrande.this);
+        int id = R.layout.comentariogrande;
+                 
+        RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(id, null, false);
+ 
+        //llamada de los objetos
+        TextView textView = (TextView) relativeLayout.findViewById(R.id.textViewTexto);      
+        TextView textodos =  (TextView)relativeLayout.findViewById(R.id.textViewTitulo);
+        
+        //agregacion de los textos que mostrar
+        textView.setText(""+valoresgenerales.valorReaccion);
+        textodos.setText("Esto es una prueba general jajajajaj");
+        
+        //agregamos accion y evento a cada boton
+        ImageButton bt = (ImageButton)relativeLayout.findViewById(R.id.imageButton1); 
+        bt.setId( val );
+        bt.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Toast.makeText(getApplicationContext(),"Position :" + arg0.getId() , Toast.LENGTH_SHORT).show();
+				
+			}
+		});
+        
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        
+        params.topMargin = 15;
+        params.leftMargin = 10;
+        relativeLayout.setPadding(5, 3, 5, 3);  
+        relativeLayout.setLayoutParams(params);
+        Vg.addView(relativeLayout);
+		
+		
+	}
 	
-	private class Carga extends AsyncTask<String, String, JSONObject>{
+	
+private class Carga extends AsyncTask<String, String, JSONObject>{
         
         ProgressDialog pDialog;
  
@@ -76,7 +110,7 @@ public class MainActivity extends Activity {
             // TODO Auto-generated method stub
             super.onPreExecute();
              
-            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog = new ProgressDialog(menugrande.this);
             pDialog.setMessage("Cargando Reacciones");
             pDialog.setCancelable(true);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -88,7 +122,7 @@ public class MainActivity extends Activity {
         protected JSONObject doInBackground(String... params) {
             
             Log.i("doInBackground" , "Entra en doInBackground");
-            MainActivity.reaccionesObj = new ArrayList<objetosReaccionesCort>();
+            menugrande.reaccionesObj = new ArrayList<objetosReaccionesLargo>();
             parser jParser = new parser();
             JSONObject json = jParser.getJSONFromUrl(url);
             
@@ -97,10 +131,8 @@ public class MainActivity extends Activity {
 				for(int i = 0;i< reacciones.length();i++){
 					
 					JSONObject c = reacciones.getJSONObject(i);
-					Bitmap bp = descargarImagen("http://chocolatescript.tk/holoquim/imagenesnoti/"+c.getString("Imagen") );
-					objetosReaccionesCort oRC = new objetosReaccionesCort(Integer.parseInt(c.getString("IDreaccion")),c.getString("Titulo"),c.getString("Texto"),bp );
+					objetosReaccionesLargo oRC = new objetosReaccionesLargo(c.getString("Titulo"),c.getString("Texto"),c.getString("video") );
 					reaccionesObj.add(oRC);
-							        
 					
 				}
 				
@@ -109,7 +141,6 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}            
-            
             
             return json;
         }
@@ -123,33 +154,29 @@ public class MainActivity extends Activity {
 					
 					JSONObject c = reacciones.getJSONObject(i);
 					
-					LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-			        int id = R.layout.comentariopequenio;
+					LayoutInflater inflater = LayoutInflater.from(menugrande.this);
+			        int id = R.layout.comentariogrande;
 			                 
 			        RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(id, null, false);
 			 
 			        //llamada de los objetos
 			        TextView textView = (TextView) relativeLayout.findViewById(R.id.textViewTexto);      
 			        TextView textodos =  (TextView)relativeLayout.findViewById(R.id.textViewTitulo);
-			        ImageView imagenView = (ImageView)relativeLayout.findViewById(R.id.imageViewIcono);
 			        
 			        //agregacion de los textos que mostrar
 			        textView.setText(""+reaccionesObj.get(i).texto);
 			        textodos.setText(""+reaccionesObj.get(i).titulo);
-			        imagenView.setImageBitmap(reaccionesObj.get(i).imagen);
+			        val = i;
 			        
 			        //agregamos accion y evento a cada boton
-			        ImageButton bt = (ImageButton)relativeLayout.findViewById(R.id.boton11); 
-			        bt.setId( reaccionesObj.get(i).id );
+			        ImageButton bt = (ImageButton)relativeLayout.findViewById(R.id.imageButton1); 
+			        bt.setId(i);
 			        bt.setOnClickListener(new View.OnClickListener() {
 						
 						@Override
 						public void onClick(View arg0) {
-							Toast.makeText(getApplicationContext(),"Position :" + arg0.getId() , Toast.LENGTH_SHORT).show();
-							valoresgenerales.valorReaccion = arg0.getId();
-							Intent inte = new Intent().setClass(MainActivity.this, menugrande.class);
-							startActivity(inte);
-							
+							//Toast.makeText(getApplicationContext(),"Position :" + arg0.getId()+"-" + menugrande.reaccionesObj.get(arg0.getId()).direccion , Toast.LENGTH_SHORT).show();
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse( menugrande.reaccionesObj.get(arg0.getId()).direccion ) ));
 						}
 					});
 			        
@@ -176,22 +203,24 @@ public class MainActivity extends Activity {
         }
          
     }
-     
-
-	private Bitmap descargarImagen (String imageHttpAddress){
-        URL imageUrl = null;
-        Bitmap imagen = null;
-        try{
-            imageUrl = new URL(imageHttpAddress);
-            HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
-            conn.connect();
-            imagen = BitmapFactory.decodeStream(conn.getInputStream());
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-         
-        return imagen;
-	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
